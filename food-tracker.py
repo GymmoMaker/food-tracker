@@ -7,10 +7,10 @@ inventory_file = DATA_DIR / "inventory.csv"
 consumption_file = DATA_DIR / "consumption.csv"
 
 def add_to_inventory():
-    name = input("What is the name of your food?")
-    purchase = get_date("What is the purchase date of your food?")
-    expiration = get_date("What is the expiration date of your food?")
-    state = input("What is the state of your food?")    
+    name = input("What is the name of your food?\n")
+    purchase = get_date("What is the purchase date of your food?\n")
+    expiration = get_date("What is the expiration date of your food?\n")
+    state = input("What is the state of your food?\n")    
     new_row = {
             'ID': str(calculate_id()),
             'Name': name,
@@ -32,6 +32,12 @@ def add_to_consumption():
 def display_expiration():
     return 1
 
+def display_inventory():
+    with open(inventory_file) as csv_file:
+        csv_reader = csv.DictReader(csv_file, delimiter=',')
+        for row in csv_reader:
+            print(f'\t{row['Name']} is currently {row['State']} and will expire on {row['Expiration']}.')
+
 def calculate_id():
     with open(inventory_file, newline='') as csv_file:
             reader = csv.DictReader(csv_file)
@@ -47,21 +53,15 @@ def get_date(question):
         except ValueError:
             print("Enter a date according to the format YYYY-MM-DD.")
 
-
-def display_inventory():
-    with open(inventory_file) as csv_file:
-        csv_reader = csv.DictReader(csv_file, delimiter=',')
-        for row in csv_reader:
-            print(f'\t{row['Name']} is currently {row['State']} and will expire on {row['Expiration']}.')
-
 def main():
-    print("Welcome to the food tracker. What would you like to do?")
-    print("Press 1 for adding food to inventory.")
-    print("Press 2 for removing food from inventory")
-    print("Press 3 for adding food to consumption.")
-    print("Press 4 for displaying expiration warnings.")
-    print("Press 5 for displaying current inventory.")
+    print("Welcome to the food tracker. What would you like to do?\n")
+    print("Press 1 for adding food to inventory.\n")
+    print("Press 2 for removing food from inventory.\n")
+    print("Press 3 for adding food to consumption.\n")
+    print("Press 4 for displaying expiration warnings.\n")
+    print("Press 5 for displaying current inventory.\n")
     sheet = input()
+    print()
 
     if sheet == "1":
         add_to_inventory()
