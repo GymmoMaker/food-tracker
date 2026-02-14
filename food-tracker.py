@@ -9,14 +9,9 @@ def add_to_inventory():
     purchase = "01-01-2026" #dummy variable for now
     expiration = input("What is the expiration date of your food?")
     state = input("What is the state of your food?")
-
-    with open(inventory_file, newline='') as csv_file:
-            reader = csv.DictReader(csv_file)
-            existing_ids = [int(row['ID']) for row in reader]
-            next_id = max(existing_ids) + 1 if existing_ids else 1
     
     new_row = {
-            'ID': str(next_id),
+            'ID': str(calculate_id()),
             'Name': name,
             'Purchase': purchase,
             'Expiration': expiration,
@@ -37,6 +32,11 @@ def add_to_consumption():
 def display_expiration():
     return 1
 
+def calculate_id():
+    with open(inventory_file, newline='') as csv_file:
+            reader = csv.DictReader(csv_file)
+            existing_ids = [int(row['ID']) for row in reader]
+            return max(existing_ids) + 1 if existing_ids else 1
 
 def display_inventory():
     with open(inventory_file) as csv_file:
