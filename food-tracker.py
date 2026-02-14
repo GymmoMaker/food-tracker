@@ -1,3 +1,8 @@
+from config import DATA_DIR
+
+inventory_file = DATA_DIR / "inventory.csv"
+consumption file = DATA_DIR / "consumption.csv"
+
 add_to_inventory():
 
 remove_from_inventory():
