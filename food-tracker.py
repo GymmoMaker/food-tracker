@@ -5,7 +5,28 @@ inventory_file = DATA_DIR / "inventory.csv"
 consumption_file = DATA_DIR / "consumption.csv"
 
 def add_to_inventory():
-    return 1
+    name = input("What is the name of your food?")
+    purchase = "01-01-2026" #dummy variable for now
+    expiration = input("What is the expiration date of your food?")
+    state = input("What is the state of your food?")
+
+    with open(inventory_file, newline='') as csv_file:
+            reader = csv.DictReader(csv_file)
+            existing_ids = [int(row['ID']) for row in reader]
+            next_id = max(existing_ids) + 1 if existing_ids else 1
+    
+    new_row = {
+            'ID': str(next_id),
+            'Name': name,
+            'Purchase': purchase,
+            'Expiration': expiration,
+            'State': state
+        }
+
+    with open(inventory_file, 'a', newline='') as csv_file:
+        fieldnames = ['ID', 'Name', 'Purchase', 'Expiration', 'State']
+        csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+        csv_writer.writerow(new_row)
 
 def remove_from_inventory():
     return 1
