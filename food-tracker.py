@@ -1,5 +1,5 @@
 import csv
-from datetime import date
+import datetime
 from datetime import datetime
 from config import DATA_DIR
 
@@ -8,9 +8,13 @@ consumption_file = DATA_DIR / "consumption.csv"
 
 def add_to_inventory():
     name = input("What is the name of your food?\n")
+    print()
     purchase = get_date("What is the purchase date of your food?\n")
+    print()
     expiration = get_date("What is the expiration date of your food?\n")
+    print()
     state = input("What is the state of your food?\n")    
+    print()
     new_row = {
             'ID': str(calculate_id()),
             'Name': name,
@@ -30,7 +34,12 @@ def add_to_consumption():
     return 1
 
 def display_expiration():
-    return 1
+    with open(inventory_file) as csv_file:
+        csv_reader = csv.DictReader(csv_file, delimiter=',')
+        for row in csv_reader:
+            expiration_date = datetime.strptime(row["Expiration"], "%Y-%m-%d")
+            days_remaining = (datetime.now() - expiration_date).days
+            print(f'{row['Name']} has {days_remaining} days remaining until expiration.')
 
 def display_inventory():
     with open(inventory_file) as csv_file:
