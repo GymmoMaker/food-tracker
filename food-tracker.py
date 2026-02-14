@@ -11,11 +11,11 @@ def main():
     print("Press 3 for adding food to consumption.")
     sheet = input()
 
-    if sheet == 1:
+    if sheet == "1":
         add_to_inventory()
-    if sheet == 2:
+    if sheet == "2":
         remove_from_inventory()
-    if sheet == 3:
+    if sheet == "3":
         add_to_consumption()
 
 if __name__ == "__main__":
