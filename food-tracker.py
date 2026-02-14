@@ -1,4 +1,6 @@
 import csv
+from datetime import date
+from datetime import datetime
 from config import DATA_DIR
 
 inventory_file = DATA_DIR / "inventory.csv"
@@ -6,10 +8,9 @@ consumption_file = DATA_DIR / "consumption.csv"
 
 def add_to_inventory():
     name = input("What is the name of your food?")
-    purchase = "01-01-2026" #dummy variable for now
-    expiration = input("What is the expiration date of your food?")
-    state = input("What is the state of your food?")
-    
+    purchase = get_date("What is the purchase date of your food?")
+    expiration = get_date("What is the expiration date of your food?")
+    state = input("What is the state of your food?")    
     new_row = {
             'ID': str(calculate_id()),
             'Name': name,
@@ -17,7 +18,6 @@ def add_to_inventory():
             'Expiration': expiration,
             'State': state
         }
-
     with open(inventory_file, 'a', newline='') as csv_file:
         fieldnames = ['ID', 'Name', 'Purchase', 'Expiration', 'State']
         csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
@@ -37,6 +37,16 @@ def calculate_id():
             reader = csv.DictReader(csv_file)
             existing_ids = [int(row['ID']) for row in reader]
             return max(existing_ids) + 1 if existing_ids else 1
+
+def get_date(question):
+    while True:
+        try:
+            date = input(question)
+            date = datetime.strptime(date, "%Y-%m-%d")
+            return date.date()
+        except ValueError:
+            print("Enter a date according to the format YYYY-MM-DD.")
+
 
 def display_inventory():
     with open(inventory_file) as csv_file:
