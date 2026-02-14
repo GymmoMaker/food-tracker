@@ -1,19 +1,35 @@
+import csv
 from config import DATA_DIR
 
 inventory_file = DATA_DIR / "inventory.csv"
-consumption file = DATA_DIR / "consumption.csv"
+consumption_file = DATA_DIR / "consumption.csv"
 
-add_to_inventory():
+def add_to_inventory():
+    return 1
 
-remove_from_inventory():
+def remove_from_inventory():
+    return 1
 
-add_to_consumption():
+def add_to_consumption():
+    return 1
+
+def display_expiration():
+    return 1
+
+
+def display_inventory():
+    with open(inventory_file) as csv_file:
+        csv_reader = csv.DictReader(csv_file, delimiter=',')
+        for row in csv_reader:
+            print(f'\t{row['Name']} is currently {row['State']} and will expire on {row['Expiration']}.')
 
 def main():
     print("Welcome to the food tracker. What would you like to do?")
     print("Press 1 for adding food to inventory.")
     print("Press 2 for removing food from inventory")
     print("Press 3 for adding food to consumption.")
+    print("Press 4 for displaying expiration warnings.")
+    print("Press 5 for displaying current inventory.")
     sheet = input()
 
     if sheet == "1":
@@ -22,6 +38,10 @@ def main():
         remove_from_inventory()
     if sheet == "3":
         add_to_consumption()
+    if sheet == "4":
+        display_expiration()
+    if sheet == "5":
+        display_inventory()
 
 if __name__ == "__main__":
     main()
