@@ -5,6 +5,7 @@ from config import DATA_DIR
 
 inventory_file = DATA_DIR / "inventory.csv"
 consumption_file = DATA_DIR / "consumption.csv"
+expiration_warning = 4
 
 def add_to_inventory():
     name = input("What is the name of your food?\n")
@@ -35,23 +36,25 @@ def add_to_consumption():
 
 def display_expiration():
     with open(inventory_file) as csv_file:
-        csv_reader = csv.DictReader(csv_file, delimiter=',')
+        csv_reader = csv.DictReader(csv_file)
         for row in csv_reader:
-            expiration_date = datetime.strptime(row["Expiration"], "%Y-%m-%d")
-            days_remaining = (datetime.now() - expiration_date).days
-            print(f'{row['Name']} has {days_remaining} days remaining until expiration.')
+            if row['State'] != 'closed' and row['State'] != 'thrown':
+                days_remaining = (datetime.now() - datetime.strptime(row['Expiration'], "%Y-%m-%d")).days
+                if days_remaining < expiration_warning:
+                    print(f'{row['Name']} has {days_remaining} days remaining until expiration.')
 
 def display_inventory():
     with open(inventory_file) as csv_file:
-        csv_reader = csv.DictReader(csv_file, delimiter=',')
+        csv_reader = csv.DictReader(csv_file)
         for row in csv_reader:
-            print(f'\t{row['Name']} is currently {row['State']} and will expire on {row['Expiration']}.')
+            if row['State'] != 'closed' and row['State'] != 'thrown':
+                print(f'\t{row['Name']} is currently {row['State']} and will expire on {row['Expiration']}.')
 
 def calculate_id():
-    with open(inventory_file, newline='') as csv_file:
-            reader = csv.DictReader(csv_file)
-            existing_ids = [int(row['ID']) for row in reader]
-            return max(existing_ids) + 1 if existing_ids else 1
+    with open(inventory_file) as csv_file:
+        csv_reader = csv.DictReader(csv_file)
+        existing_ids = [int(row['ID']) for row in reader]
+        return max(existing_ids) + 1 if existing_ids else 1
 
 def get_date(question):
     while True:
